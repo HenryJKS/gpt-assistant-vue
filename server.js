@@ -19,7 +19,6 @@ app.post('/api/boost', async (req, res) => {
         { "role": "user", "content": prompt }
         ],
         model: "gpt-4-turbo-preview",
-        max_tokens: 50,
         temperature: 0.5
     });
     res.json(completion.choices[0].message.content);
@@ -34,7 +33,6 @@ app.post('/api/simplify', async (req, res) => {
         { "role": "user", "content": prompt }
         ],
         model: "gpt-4-turbo-preview",
-        max_tokens: 50,
         temperature: 0.5
     });
     res.json(completion.choices[0].message.content);
@@ -49,22 +47,34 @@ app.post('/api/complete', async (req, res) => {
         { "role": "user", "content": prompt }
         ],
         model: "gpt-4-turbo-preview",
-        max_tokens: 50,
         temperature: 0.5
     });
     res.json(completion.choices[0].message.content);
 });
 
-app.post('/api/answer', async (req, res) => {
+app.post('/api/documents', async (req, res) => {
     const prompt = req.body.prompt;
     const completion = await openai.chat.completions.create({
         messages: [{
-            "role": "system", "content": "Você é um assistente especializado em solucionar problemas na nossa equipe. Quando um colega de equipe menciona um problema, seja ele relacionado à falta de documentos, ausência de informações, informações incorretas fornecidas ou problemas de envio, sua tarefa é redigir uma solicitação formal pedindo mais detalhes para entender melhor a situação. No entanto, se o problema não for especificado, sua resposta padrão deve ser: ‘Para fornecer a assistência mais eficaz, por favor, poderia detalhar o problema específico que você está enfrentando?’"
+            "role": "system", "content": "Você é um assistente especializado em solicitar documentos faltantes, onde receberá os tipos de documentos que faltou e você devera criar uma frase pedindo de forma prossifional os documentos faltantes."
         },
         { "role": "user", "content": prompt }
         ],
         model: "gpt-4-turbo-preview",
-        max_tokens: 50,
+        temperature: 0.5
+    });
+    res.json(completion.choices[0].message.content);
+});
+
+app.post('/api/provingvalue', async (req, res) => {
+    const prompt = req.body.prompt;
+    const completion = await openai.chat.completions.create({
+        messages: [{
+            "role": "system", "content": "Você é um assistente especializado em solicitar comprovação de valor, você devera criar uma frase pedindo de forma prossifional a comprovação de valor."
+        },
+        { "role": "user", "content": prompt }
+        ],
+        model: "gpt-4-turbo-preview",
         temperature: 0.5
     });
     res.json(completion.choices[0].message.content);
