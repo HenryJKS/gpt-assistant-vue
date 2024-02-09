@@ -56,7 +56,7 @@ app.post('/api/documents', async (req, res) => {
     const prompt = req.body.prompt;
     const completion = await openai.chat.completions.create({
         messages: [{
-            "role": "system", "content": "Você é um assistente especializado em solicitar documentos faltantes, onde receberá os tipos de documentos que faltou e você devera criar uma frase pedindo de forma prossifional os documentos faltantes."
+            "role": "system", "content": "Você é um assistente especializado em solicitar documentos faltantes, você devera criar uma frase pedindo de forma prossifional os documentos faltantes."
         },
         { "role": "user", "content": prompt }
         ],
@@ -79,6 +79,35 @@ app.post('/api/provingvalue', async (req, res) => {
     });
     res.json(completion.choices[0].message.content);
 });
+
+app.post('/api/cpfirregular', async (req, res) => {
+    const prompt = req.body.prompt;
+    const completion = await openai.chat.completions.create({
+        messages: [{
+            "role": "system", "content": "Você é um assistente especializado em solicitar uma análise de remessa com cpf irregular, você devera criar uma frase pedindo de forma prossifional a análise da remessa."
+        },
+        { "role": "user", "content": prompt }
+        ],
+        model: "gpt-4-turbo-preview",
+        temperature: 0.5
+    });
+    res.json(completion.choices[0].message.content);
+});
+
+app.post('/api/updateShipment', async (req, res) => {
+    const prompt = req.body.prompt;
+    const completion = await openai.chat.completions.create({
+        messages: [{
+            "role": "system", "content": "Você é um assistente especializado em solicitar em uma atualização de status de uma remessa, você receberá o tipo de status que deverá ser solicitado e deverá criar uma frase pedindo de forma prossifional a atualização do status da remessa."
+        },
+        { "role": "user", "content": prompt }
+        ],
+        model: "gpt-4-turbo-preview",
+        temperature: 0.5
+    });
+    res.json(completion.choices[0].message.content);
+});
+
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
