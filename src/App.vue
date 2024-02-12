@@ -3,28 +3,9 @@ import { onMounted, ref } from 'vue'
 import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
 import { CheckIcon, ChevronUpDownIcon, ChevronDoubleUpIcon } from '@heroicons/vue/20/solid'
 import axios from 'axios'
-import EditorJS from '@editorjs/editorjs'
-import Header from '@editorjs/header'
-import List from '@editorjs/list'
 const prompt = ref('');
 const isWriting = ref(false);
-const showDropdown = ref(false);
-
-onMounted(async () => {
-  EditorJS({
-    holder: 'editorjs',
-    tools: {
-      header: {
-        class: Header,
-        inlineToolbar: ['link']
-      },
-      list: {
-        class: List,
-        inlineToolbar: true
-      }
-    },
-  });
-});
+// const showDropdown = ref(false);
 
 async function promptBoost() {
     isWriting.value = true
@@ -84,11 +65,13 @@ async function promptComplete() {
     isWriting.value = false
 }
 
+// Solicitar Documentos Faltantes - passando o tracking e o funcionário
 async function promptDocuments() {
     isWriting.value = true
 
     const response = await axios.post('http://localhost:3000/api/documents', {
-        prompt: prompt.value
+        tracking: 'TR000049583BR',
+        funcionario: 'Henry'
     }).then(res => res.data).catch(err => {
         console.error(err)
         return 'Erro ao se comunicar com o servidor'
@@ -104,11 +87,13 @@ async function promptDocuments() {
     isWriting.value = false
 }
 
+// Solicitar Comprovação de Valor - Passando o Tracking e o funcionário
 async function promptProvingValue() {
     isWriting.value = true
 
     const response = await axios.post('http://localhost:3000/api/provingValue', {
-        prompt: prompt.value
+        tracking: 'TR000049583BR',
+        funcionario: 'Henry'
     }).then(res => res.data).catch(err => {
         console.error(err)
         return 'Erro ao se comunicar com o servidor'
@@ -127,41 +112,127 @@ async function promptProvingValue() {
 async function promptCPFIrregular() {
     isWriting.value = true
 
-const response = await axios.post('http://localhost:3000/api/cpfirregular', {
-    prompt: prompt.value
-}).then(res => res.data).catch(err => {
-    console.error(err)
-    return 'Erro ao se comunicar com o servidor'
-})
+    // Solicitar Análise CPF Irregular - Passando o Tracking e o funcionário
+    const response = await axios.post('http://localhost:3000/api/cpfirregular', {
+        tracking: 'TR000049583BR',
+        funcionario: 'Henry'
+    }).then(res => res.data).catch(err => {
+        console.error(err)
+        return 'Erro ao se comunicar com o servidor'
+    })
 
-prompt.value = ''
+    prompt.value = ''
 
-for (let i = 0; i < response.length; i++) {
-    await new Promise(resolve => setTimeout(resolve, 20));
-    prompt.value += response.charAt(i);
+    for (let i = 0; i < response.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+        prompt.value += response.charAt(i);
+    }
+
+    isWriting.value = false
 }
 
-isWriting.value = false
-}
-
+// Solicitar Atualização de Status - Passando o status e o tracking e o funcionário
 async function promptUpdateShipment() {
     isWriting.value = true
 
-const response = await axios.post('http://localhost:3000/api/updateShipment', {
-    prompt: prompt.value
-}).then(res => res.data).catch(err => {
-    console.error(err)
-    return 'Erro ao se comunicar com o servidor'
-})
+    const response = await axios.post('http://localhost:3000/api/updateShipment', {
+        tracking: 'TR000049583BR',
+        funcionario: 'Henry'
+    }).then(res => res.data).catch(err => {
+        console.error(err)
+        return 'Erro ao se comunicar com o servidor'
+    })
 
-prompt.value = ''
+    prompt.value = ''
 
-for (let i = 0; i < response.length; i++) {
-    await new Promise(resolve => setTimeout(resolve, 20));
-    prompt.value += response.charAt(i);
+    for (let i = 0; i < response.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+        prompt.value += response.charAt(i);
+    }
+
+    isWriting.value = false
 }
 
-isWriting.value = false
+// Traduzir para Inglês
+async function promptTranslateEnglish() {
+    isWriting.value = true
+
+    const response = await axios.post('http://localhost:3000/api/translateEng', {
+        prompt: prompt.value,
+    }).then(res => res.data).catch(err => {
+        console.error(err)
+        return 'Erro ao se comunicar com o servidor'
+    })
+
+    prompt.value = ''
+
+    for (let i = 0; i < response.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+        prompt.value += response.charAt(i);
+    }
+
+    isWriting.value = false
+}
+
+async function promptTranslateSpanish() {
+    isWriting.value = true
+
+    const response = await axios.post('http://localhost:3000/api/translateSpa', {
+        prompt: prompt.value,
+    }).then(res => res.data).catch(err => {
+        console.error(err)
+        return 'Erro ao se comunicar com o servidor'
+    })
+
+    prompt.value = ''
+
+    for (let i = 0; i < response.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+        prompt.value += response.charAt(i);
+    }
+
+    isWriting.value = false
+}
+
+async function promptTranslateRussian() {
+    isWriting.value = true
+
+    const response = await axios.post('http://localhost:3000/api/translateRus', {
+        prompt: prompt.value,
+    }).then(res => res.data).catch(err => {
+        console.error(err)
+        return 'Erro ao se comunicar com o servidor'
+    })
+
+    prompt.value = ''
+
+    for (let i = 0; i < response.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+        prompt.value += response.charAt(i);
+    }
+
+    isWriting.value = false
+}
+
+// Traduzir para Alemão
+async function promptTranslateGerman() {
+    isWriting.value = true
+
+    const response = await axios.post('http://localhost:3000/api/translateGer', {
+        prompt: prompt.value,
+    }).then(res => res.data).catch(err => {
+        console.error(err)
+        return 'Erro ao se comunicar com o servidor'
+    })
+
+    prompt.value = ''
+
+    for (let i = 0; i < response.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+        prompt.value += response.charAt(i);
+    }
+
+    isWriting.value = false
 }
 
 </script>
@@ -178,9 +249,8 @@ isWriting.value = false
                     <div class="flex flex-col items-stretch">
                         <label for="prompt" class="text-sm font-semibold" />
                         <textarea v-model="prompt" @keyup.enter="promptBoost" id="prompt" type="text" :disabled="isWriting"
-                            class="w-full p-2 border border-gray-300 rounded-md min-h-[100px] max-h-[400px]"
-                            @input="showDropdown = prompt.length > 0" />
-                        <Listbox v-model="selected" v-if="showDropdown" as="div" class="mt-1 relative">
+                            class="w-full p-2 border border-gray-300 rounded-md min-h-[100px] max-h-[400px]" />
+                        <Listbox v-model="selected" as="div" class="mt-1 relative">
                             <ListboxButton
                                 class="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-orange-500 sm:text-sm">
                                 <span class="block truncate">Selecione uma opção</span>
@@ -217,31 +287,65 @@ isWriting.value = false
                                     <button class="font-normal block truncate w-full text-left"
                                         @click="promptDocuments">Solicitar Documentos Faltantes</button>
                                     <span class="text-blue-500 absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <font-awesome-icon :icon="['fas', 'file']" class="w-5 h-5" aria-hidden="true" color="#0d3e56"/>
+                                        <font-awesome-icon :icon="['fas', 'file']" class="w-5 h-5" aria-hidden="true"
+                                            color="#0d3e56" />
                                     </span>
                                 </ListboxOption>
                                 <ListboxOption class="text-gray-900 cursor-default select-none relative py-2 pl-10 pr-4">
                                     <button class="font-normal block truncate w-full text-left"
                                         @click="promptProvingValue">Solicitar Comprovação de Valor</button>
                                     <span class="text-blue-500 absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <font-awesome-icon :icon="['fas', 'dollar-sign']" class="w-5 h-5"
-                                            aria-hidden="true" color="#0d3e56"/>
+                                        <font-awesome-icon :icon="['fas', 'dollar-sign']" class="w-5 h-5" aria-hidden="true"
+                                            color="#0d3e56" />
                                     </span>
                                 </ListboxOption>
                                 <ListboxOption class="text-gray-900 cursor-default select-none relative py-2 pl-10 pr-4">
                                     <button class="font-normal block truncate w-full text-left"
                                         @click="promptCPFIrregular">Solicitar Análise CPF Irregular</button>
                                     <span class="text-blue-500 absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <font-awesome-icon :icon="['fas', 'thumbs-down']" class="w-5 h-5"
-                                            aria-hidden="true" color="#0d3e56"/>
+                                        <font-awesome-icon :icon="['fas', 'thumbs-down']" class="w-5 h-5" aria-hidden="true"
+                                            color="#0d3e56" />
                                     </span>
                                 </ListboxOption>
                                 <ListboxOption class="text-gray-900 cursor-default select-none relative py-2 pl-10 pr-4">
                                     <button class="font-normal block truncate w-full text-left"
                                         @click="promptUpdateShipment">Solicitar Atualização de Status</button>
                                     <span class="text-blue-500 absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <font-awesome-icon :icon="['fas', 'note-sticky']" class="w-5 h-5"
-                                            aria-hidden="true" color="#0d3e56"/>
+                                        <font-awesome-icon :icon="['fas', 'note-sticky']" class="w-5 h-5" aria-hidden="true"
+                                            color="#0d3e56" />
+                                    </span>
+                                </ListboxOption>
+                                <div class="hr-text">Traduzir</div>
+                                <ListboxOption class="text-gray-900 cursor-default select-none relative py-2 pl-10 pr-4">
+                                    <button class="font-normal block truncate w-full text-left"
+                                        @click="promptTranslateEnglish">Inglês</button>
+                                    <span class="text-blue-500 absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <font-awesome-icon :icon="['fas', 'language']" class="w-5 h-5" aria-hidden="true"
+                                            color="#0d3e56" />
+                                    </span>
+                                </ListboxOption>
+                                <ListboxOption class="text-gray-900 cursor-default select-none relative py-2 pl-10 pr-4">
+                                    <button class="font-normal block truncate w-full text-left"
+                                        @click="promptTranslateSpanish">Espanhol</button>
+                                    <span class="text-blue-500 absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <font-awesome-icon :icon="['fas', 'language']" class="w-5 h-5" aria-hidden="true"
+                                            color="#0d3e56" />
+                                    </span>
+                                </ListboxOption>
+                                <ListboxOption class="text-gray-900 cursor-default select-none relative py-2 pl-10 pr-4">
+                                    <button class="font-normal block truncate w-full text-left"
+                                        @click="promptTranslateRussian">Russo</button>
+                                    <span class="text-blue-500 absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <font-awesome-icon :icon="['fas', 'language']" class="w-5 h-5" aria-hidden="true"
+                                            color="#0d3e56" />
+                                    </span>
+                                </ListboxOption>
+                                <ListboxOption class="text-gray-900 cursor-default select-none relative py-2 pl-10 pr-4">
+                                    <button class="font-normal block truncate w-full text-left"
+                                        @click="promptTranslateGerman">Alemão</button>
+                                    <span class="text-blue-500 absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <font-awesome-icon :icon="['fas', 'language']" class="w-5 h-5" aria-hidden="true"
+                                            color="#0d3e56" />
                                     </span>
                                 </ListboxOption>
                             </ListboxOptions>
@@ -252,11 +356,9 @@ isWriting.value = false
             </div>
         </div>
     </div>
-
 </template>
 
 <style>
-
 .hr-text {
     display: flex;
     align-items: center;

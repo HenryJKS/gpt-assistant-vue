@@ -53,61 +53,138 @@ app.post('/api/complete', async (req, res) => {
 });
 
 app.post('/api/documents', async (req, res) => {
-    const prompt = req.body.prompt;
+    const {tracking, funcionario} = req.body;
     const completion = await openai.chat.completions.create({
         messages: [{
-            "role": "system", "content": "Você é um assistente especializado em solicitar documentos faltantes, você devera criar uma frase pedindo de forma prossifional os documentos faltantes."
+            "role": "system", "content": "Você é um assistente especializado em solicitar documentos faltantes, Sua tarefa é redigir uma solicitação de documentos faltantes. Você receberá o código de rastreamento da remessa, e o nome do funcionário que está solicitando o documento."
         },
-        { "role": "user", "content": prompt }
+        { "role": "user", "content": `Por favor, redija a solicitação da seguinte maneira: Prezados responsáveis, Gostaríamos de solicitar a gentileza de enviar os documentos faltantes referente a remessa ${tracking}. Atenciosamente ${funcionario}` }
         ],
         model: "gpt-4-turbo-preview",
-        temperature: 0.5
+        temperature: 0.1,
+        max_tokens: 100
     });
     res.json(completion.choices[0].message.content);
 });
 
+// passando o tracking para o assistente
 app.post('/api/provingvalue', async (req, res) => {
-    const prompt = req.body.prompt;
+    const {tracking, funcionario} = req.body;
     const completion = await openai.chat.completions.create({
         messages: [{
-            "role": "system", "content": "Você é um assistente especializado em solicitar comprovação de valor, você devera criar uma frase pedindo de forma prossifional a comprovação de valor."
+            "role": "system", 
+            "content": "Você é um assistente especializado em logística. Sua tarefa é redigir uma solicitação de comprovação de valor. Você receberá o código de rastreamento da remessa, e o nome do funcionário que está solicitando a comprovação de valor."
         },
-        { "role": "user", "content": prompt }
-        ],
-        model: "gpt-4-turbo-preview",
-        temperature: 0.5
+        { 
+            "role": "user", 
+            "content": `Por favor, redija a solicitação da seguinte maneira: Prezados responsáveis para comprovação de valor, Gostaríamos de solicitar a comprovação de valor referente a remessa ${tracking}. Atenciosamente ${funcionario}` 
+        }],
+        model: "gpt-3.5-turbo",
+        temperature: 0.1,
+        max_tokens: 100
     });
     res.json(completion.choices[0].message.content);
 });
 
+
+// passando o tracking para o assistente
 app.post('/api/cpfirregular', async (req, res) => {
-    const prompt = req.body.prompt;
+    const { tracking, funcionario } = req.body;
     const completion = await openai.chat.completions.create({
         messages: [{
-            "role": "system", "content": "Você é um assistente especializado em solicitar uma análise de remessa com cpf irregular, você devera criar uma frase pedindo de forma prossifional a análise da remessa."
+            "role": "system", "content": "Você é um assistente especializado em logística. Sua tarefa é redigir uma solicitação de análise de uma remessa com CPF irregular. Você receberá o código de rastreamento da remessa, o status para ser atualizado e o nome do funcionário que está solicitando a análise."
         },
-        { "role": "user", "content": prompt }
+        {
+            "role": "user", "content": `Por favor, redija a solicitação da seguinte maneira: Prezados responsáveis pela análise de remessas, Gostaríamos de solicitar a gentileza de realizar a análise da remessa com CPF irregular, referente à remessa de código ${tracking}. Atenciosamente, ${funcionario}`
+        }
         ],
-        model: "gpt-4-turbo-preview",
-        temperature: 0.5
+        model: "gpt-3.5-turbo",
+        temperature: 0.1,
+        max_tokens: 100
     });
     res.json(completion.choices[0].message.content);
 });
 
+// passando o status e o tracking para o assistente
 app.post('/api/updateShipment', async (req, res) => {
-    const prompt = req.body.prompt;
+    const { tracking, funcionario } = req.body;
     const completion = await openai.chat.completions.create({
         messages: [{
-            "role": "system", "content": "Você é um assistente especializado em solicitar em uma atualização de status de uma remessa, você receberá o tipo de status que deverá ser solicitado e deverá criar uma frase pedindo de forma prossifional a atualização do status da remessa."
+            "role": "system",
+            "content": `Você é um assistente especializado em logística. Sua tarefa é redigir uma solicitação de alteração de status de uma remessa. Você receberá o código de rastreamento da remessa e o nome do funcionário que está solicitando a atualização.`
         },
-        { "role": "user", "content": prompt }
+        { "role": "user", "content": `Por favor, redija a solicitação da seguinte maneira: Gostaríamos de solicitar a atualização do status da remessa com o código de rastreamento ${tracking}. Atenciosamente, ${funcionario}` }
         ],
-        model: "gpt-4-turbo-preview",
-        temperature: 0.5
+        model: "gpt-3.5-turbo",
+        temperature: 0.1,
+        max_tokens: 100
     });
     res.json(completion.choices[0].message.content);
 });
 
+// Traduzindo o texto para o Inglês
+app.post('/api/translateEng', async (req, res) => {
+    const prompt = req.body.prompt;
+    const completion = await openai.chat.completions.create({
+        messages: [{
+            "role": "system",
+            "content": "Você é um assistente de tradução. Sua tarefa é traduzir o texto para o inglês."
+        },
+        { "role": "user", "content": prompt }
+        ],
+        model: "gpt-3.5-turbo",
+        temperature: 0.1,
+    });
+    res.json(completion.choices[0].message.content);
+});
+
+// Traduzindo o texto para o Espanhol
+app.post('/api/translateSpa', async (req, res) => {
+    const prompt = req.body.prompt;
+    const completion = await openai.chat.completions.create({
+        messages: [{
+            "role": "system",
+            "content": "Você é um assistente de tradução. Sua tarefa é traduzir o texto para o espanhol."
+        },
+        { "role": "user", "content": prompt }
+        ],
+        model: "gpt-3.5-turbo",
+        temperature: 0.1,
+    });
+    res.json(completion.choices[0].message.content);
+});
+
+// Traduzindo o texto para o Russo
+app.post('/api/translateRus', async (req, res) => {
+    const prompt = req.body.prompt;
+    const completion = await openai.chat.completions.create({
+        messages: [{
+            "role": "system",
+            "content": "Você é um assistente de tradução. Sua tarefa é traduzir o texto para o russo."
+        },
+        { "role": "user", "content": prompt }
+        ],
+        model: "gpt-3.5-turbo",
+        temperature: 0.1,
+    });
+    res.json(completion.choices[0].message.content);
+});
+
+// Traduzindo o texto para Alemao
+app.post('/api/translateGer', async (req, res) => {
+    const prompt = req.body.prompt;
+    const completion = await openai.chat.completions.create({
+        messages: [{
+            "role": "system",
+            "content": "Você é um assistente de tradução. Sua tarefa é traduzir o texto para o alemão."
+        },
+        { "role": "user", "content": prompt }
+        ],
+        model: "gpt-3.5-turbo",
+        temperature: 0.1,
+    });
+    res.json(completion.choices[0].message.content);
+});
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
