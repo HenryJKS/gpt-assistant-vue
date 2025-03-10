@@ -21,7 +21,7 @@
     "@headlessui/vue": "^1.7.18",
     "@heroicons/vue": "^2.1.1",
     "@vue-hero-icons/outline": "^1.7.2",
-    "axios": "^1.6.7",
+    "axios": "^1.8.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
